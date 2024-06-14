@@ -299,14 +299,25 @@ html`<iframe class="custom-iframe" style="border-radius:12px; display: flex; jus
 ### Row {height="20%"}
 
 :::{.card expandable="false"}
+<!-- <div style="background-color: #7D3C98; color: white; border-radius: 10px; padding: 10px; text-align: center; display: flex; align-items: center; justify-content: center; height: 100%;"> -->
+
+<!-- <span style="font-size: 1vw; width: 100%;"> -->
+<!--     **Interested in creating a similar project?** This dashboard was designed by [Lucas Okwudishu](https://www.lokwudishu.com/) following a tutorial by [Melissa Van Bussel](https://www.melissavanbussel.com/). You can access the source code for this dashboard [here](https://github.com/LucasO21/spotify-dashboard). <br> Discover the original dashboard by Melissa Van Bussel [here](https://melissavanbussel.github.io/spotify-dashboard) and view her source code [here](https://github.com/melissavanbussel/spotify-dashboard). <br> Learn more about [Posit's 2024 Table Contest](https://posit.co/blog/announcing-the-2024-table-contest/). -->
+
+
+<!-- </span> -->
+
+
+::: {.card expandable="false"}
 <div style="background-color: #7D3C98; color: white; border-radius: 10px; padding: 10px; text-align: center; display: flex; align-items: center; justify-content: center; height: 100%;">
 
 <span style="font-size: 1vw; width: 100%;">
-    **Interested in creating a similar project?** This dashboard was designed by [Lucas Okwudishu](https://www.lokwudishu.com/) following a tutorial by [Melissa Van Bussel](https://www.melissavanbussel.com/). You can access the source code for this dashboard [here](https://github.com/LucasO21/spotify-dashboard). <br> Discover the original dashboard by Melissa Van Bussel [here](https://melissavanbussel.github.io/spotify-dashboard) and view her source code [here](https://github.com/melissavanbussel/spotify-dashboard). <br> Learn more about [Posit's 2024 Table Contest](https://posit.co/blog/announcing-the-2024-table-contest/).
-    
-
+This dashboard was designed by <a href="https://www.lokwudishu.com/" target="_blank">Lucas Okwudishu</a> following a tutorial by <a href="https://www.melissavanbussel.com/" target="_blank">Melissa Van Bussel</a>. You can access the source code for this dashboard <a href="https://github.com/LucasO21/spotify-dashboard" target="_blank">here</a>. <br> Discover the original dashboard by Melissa Van Bussel <a href="https://melissavanbussel.github.io/spotify-dashboard" target="_blank">here</a> and view her source code <a href="https://github.com/melissavanbussel/spotify-dashboard" target="_blank">here</a>. <br> Learn more about <a href="https://posit.co/blog/announcing-the-2024-table-contest/" target="_blank">Posit's 2024 Table Contest</a>.
 </span>
 
+</div>
+
 :::
+
 
 
