@@ -21,21 +21,23 @@ library(httr2)
 ```{r, create_token_session}
 #| echo: false
 #| include: false
+
+# Define Spotify client ID and client secret
 client_id <- Sys.getenv("SPOTIFY_CLIENT_ID")
 client_secret <- Sys.getenv("SPOTIFY_CLIENT_SECRET")
 
-req_access_token <- request("https://accounts.spotify.com/api/token") %>%  
-  req_method("POST") %>% 
+# Generate Spotify access token
+req_access_token <- request("https://accounts.spotify.com/api/token") |> 
+  req_method("POST") |> 
   req_body_raw(paste0(
-      "grant_type=client_credentials&client_id=",
-      client_id,
-      "&client_secret=",
-      client_secret),
-      "application/x-www-form-urlencoded") %>% 
-    req_perform() %>% 
-    resp_body_json()
-
-spotify_access_token <-  req_access_token$access_token
+    "grant_type=client_credentials&client_id=",
+    client_id,
+    "&client_secret=",
+    client_secret
+  ), "application/x-www-form-urlencoded") |> 
+  req_perform() |> 
+  resp_body_json()
+spotify_access_token <- req_access_token$access_token
 
 ```
 
