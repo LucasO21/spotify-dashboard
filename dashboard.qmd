@@ -1,5 +1,6 @@
 ---
-title: "Today's Top Hits"
+title: "Daily Mix 5"
+subtitle: "Made for Lucas Okwudishiu"
 format: dashboard
 logo: "images/logo.png"
 orientation: columns
@@ -15,6 +16,7 @@ Placeholder text for column 1
 #| include: false
 library(tidyverse)
 library(httr2)
+library(gt)
 ```
 
 
@@ -37,6 +39,7 @@ req_access_token <- request("https://accounts.spotify.com/api/token") |>
   ), "application/x-www-form-urlencoded") |> 
   req_perform() |> 
   resp_body_json()
+
 spotify_access_token <- req_access_token$access_token
 
 ```
@@ -98,6 +101,114 @@ daily_mix_5_tbl$tempo <- I(tempo_list)
 
 ```
 
+```{r, icons_svg}
+#| echo: false
+#| include: false
+clock_svg <- '<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="15" height="15" viewBox="0,0,256,256">
+<g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.12,5.12)"><path d="M25,2c-12.683,0 -23,10.317 -23,23c0,12.683 10.317,23 23,23c12.683,0 23,-10.317 23,-23c0,-12.683 -10.317,-23 -23,-23zM25,28c-0.462,0 -0.895,-0.113 -1.286,-0.3l-6.007,6.007c-0.195,0.195 -0.451,0.293 -0.707,0.293c-0.256,0 -0.512,-0.098 -0.707,-0.293c-0.391,-0.391 -0.391,-1.023 0,-1.414l6.007,-6.007c-0.187,-0.391 -0.3,-0.824 -0.3,-1.286c0,-1.304 0.837,-2.403 2,-2.816v-14.184c0,-0.553 0.447,-1 1,-1c0.553,0 1,0.447 1,1v14.184c1.163,0.413 2,1.512 2,2.816c0,1.657 -1.343,3 -3,3z"></path></g></g>
+</svg>'
+
+generate_svg_circle <- function(popularity_value) {
+    
+  popularity_value <- as.numeric(popularity_value)
+  
+  # Calculate the radius of the circle
+  radius <- 10 + 15 * (popularity_value / 100)  
+  
+  # Interpolate the color from red (popularity = 0) to green (popularity = 100)
+  circle_colour_picker <- colorRampPalette(c("#B91d1d", "#ED8E11", "#EDDE11", "#1DB954"))
+  
+  # There are 101 colour values since popularity ranges from 0 to 100
+  color <- circle_colour_picker(101)[popularity_value + 1]
+  
+  # Generate the SVG code for the circle
+  svg_code <- sprintf(
+    '<svg height="%1$s" width="%1$s"><circle cx="%2$s" cy="%2$s" r="%2$s" stroke="none" stroke-width="0" fill="%3$s" /><text class="circle-text" x="%2$s" y="%2$s" font-size="%4$s" fill="white" text-anchor="middle" dy=".3em">%5$s</text></svg>',
+    2 * radius,        # SVG width and height
+    radius,            # Circle center x, y
+    color,             # Fill color used also for stroke
+    radius * 0.6,      # Font size based on radius
+    popularity_value   # Text to display
+  )
+  return(svg_code)
+}
+
+popularity_footnote <- "The popularity of a track is a value between 0 and 100, with 100 being the most popular. The popularity is calculated by algorithm and is based, in the most part, on the total number of plays the track has had and how recent those plays are. Generally speaking, songs that are being played a lot now will have a higher popularity than songs that were played a lot in the past."
+
+tempo_footnote <- "The tempo is measured in beats per minute and represents the speed at which the music is played. The visualization shows how the tempo varies across the different sections of the song. Sections with a higher tempo are generally more energetic and upbeat, while sections with a lower tempo may be more emotional or contemplative."
+
+source_footnote <- "**Source:** [Today's Top Hits Playlist](https://open.spotify.com/playlist/37i9dQZF1E356z5s0S0LAr?si=e6ca1575032c45af), from the Spotify Web API"
+
+```
+
+
+
+```{r, create_gt_table}
+
+daily_mix_5_tbl |> 
+    select(album_art, song_name, artist_name, song_duration, popularity, tempo) |>
+    rename(track_duration = song_duration) |> 
+    gt() |>
+    cols_label(
+        album_art      = md("**Song**"),
+        song_name      = "",
+        artist_name    = md("**Artist**"),
+        track_duration = html(clock_svg),
+        popularity     = md("**Popularity**")
+    ) |> 
+    text_transform(
+        fn = function(x) {
+            web_image(url = x, height = 50)
+        },
+        locations = cells_body(columns = album_art)
+    ) |> 
+    text_transform(
+        fn = function(x) {
+          generate_svg_circle(x)
+        },
+        locations = cells_body(columns = popularity)
+    ) |> 
+    fmt(
+        columns = track_duration,
+        fns = function(x) {
+            minutes <- floor(x / 60000)
+            seconds <- round((x %% 60000) / 1000)
+            sprintf("%d:%02d", minutes, seconds)
+        }
+    ) |> 
+    cols_nanoplot(
+        columns = tempo,
+        plot_type     = "line",
+        new_col_name  = "tempos",
+        new_col_label = md("**Tempo**"),
+        options = nanoplot_options(
+            data_point_fill_color   = "#1CD360",
+            data_point_stroke_color = "#1CD360",
+            data_area_fill_color    = "#1CD360",
+            data_line_stroke_color  = "#7D3C98"
+        )
+    ) |>
+    tab_options(
+        table.font.color = "white",
+        table.background.color = "#121212",
+    ) |> 
+    cols_align(
+        align = "center",
+        columns = c(track_duration, popularity, tempo)
+    ) |> 
+    tab_footnote(
+        footnote = popularity_footnote,
+        locations = cells_column_labels(columns = popularity)
+    ) |> 
+    tab_footnote(
+        footnote = tempo_footnote,
+        locations = cells_column_labels(columns = tempos)
+    ) |> 
+    tab_source_note(
+        source_note = md(source_footnote)
+     ) 
+```
+
 
 ## Column {width=65%}
 
@@ -146,8 +257,25 @@ html`<iframe class="custom-iframe" style="border-radius:12px; display: flex; jus
 ```
 
 
-Placeholder text for column 2 row 2
-
 ### Row {height="20%"}
 
-Placeholder text for column 2 row 3
+:::{.card expandable="false"}
+<div style="background-color: #7D3C98; color: white; border-radius: 10px; padding: 10px; text-align: center; display: flex; align-items: center; justify-content: center; height: 100%;">
+
+<span style="font-size: 1vw; width: 100%;">
+    **Interested in creating a similar project?** This dashboard was designed by [Lucas Okwudishu](https://www.lokwudishu.com/){:target="_blank"} following a tutorial by [Melissa Van Bussel](https://www.melissavanbussel.com/){:target="_blank"}. You can access the source code for this dashboard [here](https://github.com/LucasO21/spotify-dashboard){:target="_blank"}.
+    
+<br>
+    
+Discover the original dashboard by Melissa Van Bussel [here](https://melissavanbussel.github.io/spotify-dashboard){:target="_blank"} and view her source code [here](https://github.com/melissavanbussel/spotify-dashboard){:target="_blank"}.
+     
+<br>
+
+Learn more about [Posit's 2024 Table Contest](https://posit.co/blog/announcing-the-2024-table-contest/){:target="_blank"}. 
+
+   
+</span>
+
+
+</div>
+:::
