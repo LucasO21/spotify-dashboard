@@ -1,7 +1,8 @@
-/.quarto/
 .Rproj.user
 .RData
 .Rhistory
 .Ruserdata
+.Renviron
 
 /_site/
+/.quarto/

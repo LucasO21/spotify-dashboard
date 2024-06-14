@@ -10,17 +10,92 @@ orientation: columns
 
 Placeholder text for column 1
 
-```{r, loadpackages}
+```{r, load_packages}
 #| echo: false
 #| include: false
 library(tidyverse)
+library(httr2)
+```
+
+
+```{r, create_token_session}
+#| echo: false
+#| include: false
+client_id <- Sys.getenv("SPOTIFY_CLIENT_ID")
+client_secret <- Sys.getenv("SPOTIFY_CLIENT_SECRET")
+
+req_access_token <- request("https://accounts.spotify.com/api/token") %>%  
+  req_method("POST") %>% 
+  req_body_raw(paste0(
+      "grant_type=client_credentials&client_id=",
+      client_id,
+      "&client_secret=",
+      client_secret),
+      "application/x-www-form-urlencoded") %>% 
+    req_perform() %>% 
+    resp_body_json()
+
+spotify_access_token <-  req_access_token$access_token
 
 ```
 
-```{r, printmtcars}
-head(mtcars %>% as_tibble())
+
+```{r, daily_mix_5}
+#| echo: false
+#| include: false
+#playlist_id <- "37i9dQZF1E356z5s0S0LAr?si=23953eea287141a3"
+
+daily_mix_5 <- request("https://api.spotify.com/v1/playlists/37i9dQZF1E356z5s0S0LAr?si=23953eea287141a3") |> 
+  req_method("GET") |> 
+  req_headers(
+    Authorization = paste0("Bearer ", spotify_access_token),
+  ) |> 
+  req_perform() |> 
+  resp_body_json()
+
+# Create data frame with daily mix 5 information
+song_name <- lapply(daily_mix_5$tracks$items, FUN = function(x) {x$track$name}) %>% unlist()
+song_id <- lapply(daily_mix_5$tracks$items, FUN = function(x) {x$track$id}) %>% unlist()
+artist_name <- lapply(daily_mix_5$tracks$items, FUN = function(x) {x$track$artists[[1]]$name}) %>% unlist()
+album_art <- lapply(daily_mix_5$tracks$items, FUN = function(x) {x$track$album$images[[3]]$url}) %>% unlist()
+song_duration <- lapply(daily_mix_5$tracks$items, FUN = function(x) {x$track$duration_ms}) %>% unlist()
+popularity <- lapply(daily_mix_5$tracks$items, FUN = function(x) {x$track$popularity}) %>% unlist()
+
+daily_mix_5_tbl <- data.frame(song_name, song_id, artist_name, album_art, song_duration, popularity) %>% 
+    as_tibble()
 
 ```
+
+
+```{r, tempo_extraction}
+# Curl
+# curl_translate(
+#     "curl --request GET \
+#   --url https://api.spotify.com/v1/audio-analysis/11dFghVXANMlKmJXsNCbNl \
+#   --header 'Authorization: Bearer 1POdFZRZbvb...qqillRxMr2z'"
+# )
+
+# Curl Translate
+tempo_list <- vector(mode = "list", length = 50)
+
+for (i in 1:50) {
+    audio_analysis <- request(paste0("https://api.spotify.com/v1/audio-analysis/", daily_mix_5_tbl$song_id[i])) |> 
+      req_method("GET") |> 
+      req_headers(
+        Authorization = paste0("Bearer ", spotify_access_token),
+      ) |> 
+      req_perform() |> 
+      resp_body_json()
+    
+    # Get tempo for each section of the song
+    tempo_list[[i]] <- lapply(audio_analysis$sections, FUN = function(x) {x$tempo}) %>% unlist()
+}
+
+# Add tempo to daily mix 5 table
+daily_mix_5_tbl$tempo <- I(tempo_list)
+
+```
+
 
 ## Column {width=65%}
 
@@ -28,9 +103,46 @@ Placeholder text for column 2
 
 ### Row {height="10%"}
 
-Placeholder text for column 2 row 1
+```{r, send_to_ojs}
+#| echo: false
+#| include: false
+
+ojs_define(daily_mix_ojs = daily_mix_5_tbl)
+
+```
+
+```{ojs}
+//| expandable: false
+// Transpose Data
+daily_mix = transpose(daily_mix_ojs)
+
+// Create Dropdown Menu
+viewof songDropdown = Inputs.select(
+  daily_mix.map(d => d.song_name),
+  {
+    label: "Choose a song",
+    unique: true
+  }
+)
+```
 
 ### Row {height="70%"}
+
+```{ojs}
+//| expandable: false
+html`<iframe class="custom-iframe" style="border-radius:12px; display: flex; justify-content: center; align-items: center;" 
+  src=${`https://open.spotify.com/embed/track/${daily_mix.find(song => song.song_name === songDropdown).song_id}?utm_source=generator&theme=0`} 
+  width="100%" 
+  height="352" 
+  frameBorder="0" 
+  allowfullscreen="" 
+  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+  loading="lazy">
+</iframe>`
+
+
+```
+
 
 Placeholder text for column 2 row 2
 
