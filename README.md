@@ -5,8 +5,7 @@ updated with GitHub Actions.
 
 ### 🚨 Important Notice
 
-Due to recent
-<a href="https://developer.spotify.com/blog/2024-11-27-changes-to-the-web-api" target="_blank">changes</a>
+Due to recent <a href="https://developer.spotify.com/blog/2024-11-27-changes-to-the-web-api" target="_blank">changes</a>
 
 in the Spotify API, certain endpoints (such as those used to fetch audio
 features and tempo data) have been deprecated. As a result, this
