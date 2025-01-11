@@ -6,7 +6,8 @@ updated with GitHub Actions.
 ### 🚨 Important Notice
 
 Due to recent
-[changes](https://developer.spotify.com/blog/2024-11-27-changes-to-the-web-api)
+<a href="https://developer.spotify.com/blog/2024-11-27-changes-to-the-web-api" target="_blank">changes</a>
+
 in the Spotify API, certain endpoints (such as those used to fetch audio
 features and tempo data) have been deprecated. As a result, this
 dashboard is no longer able to fetch and display updated data.
@@ -23,55 +24,33 @@ However, the codebase remains a valuable resource for learning about:
 
 ### 📝 Project Overview
 
-This dashboard was designed to display detailed insights from Spotify's
-EDM Punk Playlist, including:
+This dashboard was designed to display detailed track information from my
+EDM/Punk playlist on Spotify. Including:
 
-🎵 Track Information: Song name, artist, album art, and popularity.
+- Track Information: Song name, artist, album art, and popularity.
 
-🕒 Track Duration: Represented visually using custom icons.
+- Track Duration: Represented visually using custom icons.
 
-🥁 Tempo Variations: Visualized as a line plot for different sections of
+- Tempo Variations: Visualized as a line plot for different sections of
 each song.
 
-🛠️ Technologies Use: - Programming Language: R - Packages: tidyverse,
-httr2, gt - Workflow Automation: GitHub Actions - Data Source: Spotify
-Web API
+------------------------------------------------------------------------
+
+### 🛠️ Technologies Used
+
+- Programming Language: R .
+- Packages: tidyverse, httr2, gt.
+- Workflow Automation: GitHub Actions. 
+- Data Source: Spotify Web API
 
 ------------------------------------------------------------------------
 
-### 📊 Features
+### 🤝 Acknowledgments
 
-🎨 Beautiful and Interactive Dashboard
-
--   Integrated Spotify track embedding to listen directly to songs.
-
--   Rich visualizations including:
-
-    -   🎨 Popularity Heatmap: Generated with custom SVG circles,
-        dynamically scaled based on Spotify popularity scores.
-    -   🕒 Duration Formatting: Tracks displayed in minutes and seconds.
-    -   🥁 Tempo Analysis: Visualized tempo variations for different
-        song sections.
-
-- GitHub Actions for Automation
-
-    -   Automated the dashboard's updates by pulling playlist data via the
-    Spotify API on a schedule.
-
-    -   Utilized the Spotify Client Credentials flow for token-based
-    authentication.
-
-------------------------------------------------------------------------
-
-🤝 Acknowledgments
-
-Special thanks to:
-
-Melissa Van Bussel for inspiring this project. You can find her work
+Special thanks to Melissa Van Bussel for inspiring this project. You can find her work
 below:
 
--   [Spotify
-    Dashboard](https://melissavanbussel.github.io/spotify-dashboard/dashboard.html).
+-   <a href="https://melissavanbussel.github.io/spotify-dashboard/dashboard.html" target="_blank">Spotify Dashboard.</a>
 
--   [GitHub
-    Repository](https://github.com/melissavanbussel/spotify-dashboard/tree/main).
+-   <a href="https://github.com/melissavanbussel/spotify-dashboard/tree/main" target="_blank">Spotify Dashboard</a>
+
