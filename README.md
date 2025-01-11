@@ -1,15 +1,9 @@
----
-editor: 
-  markdown: 
-    wrap: 72
----
-
 ## 🎵 Spotify Dashboard: EDM Punk Playlist 🎶
 
 A dynamic dashboard showcasing Spotify's EDM Punk Playlist, previously
 updated with GitHub Actions.
 
-🚨 Important Notice
+### 🚨 Important Notice
 
 Due to recent
 [changes](https://developer.spotify.com/blog/2024-11-27-changes-to-the-web-api)
@@ -27,7 +21,7 @@ However, the codebase remains a valuable resource for learning about:
 
 ------------------------------------------------------------------------
 
-📝 Project Overview
+### 📝 Project Overview
 
 This dashboard was designed to display detailed insights from Spotify's
 EDM Punk Playlist, including:
@@ -45,7 +39,7 @@ Web API
 
 ------------------------------------------------------------------------
 
-📊 Features
+### 📊 Features
 
 🎨 Beautiful and Interactive Dashboard
 
@@ -59,12 +53,12 @@ Web API
     -   🥁 Tempo Analysis: Visualized tempo variations for different
         song sections.
 
-🔄 GitHub Actions for Automation
+- GitHub Actions for Automation
 
--   Automated the dashboard's updates by pulling playlist data via the
+    -   Automated the dashboard's updates by pulling playlist data via the
     Spotify API on a schedule.
 
--   Utilized the Spotify Client Credentials flow for token-based
+    -   Utilized the Spotify Client Credentials flow for token-based
     authentication.
 
 ------------------------------------------------------------------------
