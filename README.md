@@ -48,6 +48,6 @@ each song.
 Special thanks to Melissa Van Bussel for inspiring this project. You can find her work
 below:
 
--   [Spotify Dashboard](https://melissavanbussel.github.io/spotify-dashboard/dashboard.html) (right-click to open in a new tab)
--   [Spotify Dashboard Repository](https://github.com/melissavanbussel/spotify-dashboard/tree/main) (right-click to open in a new tab)
+-   [Spotify Dashboard.](https://melissavanbussel.github.io/spotify-dashboard/dashboard.html)
+-   [Spotify Dashboard Repository.](https://github.com/melissavanbussel/spotify-dashboard/tree/main)
 
