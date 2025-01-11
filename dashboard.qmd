@@ -47,12 +47,12 @@ spotify_access_token <- req_access_token$access_token
 ```
 
 
-```{r, daily_mix_5}
+```{r, edm_punk_mix}
 #| echo: false
 #| include: false
 #playlist_id <- "37i9dQZF1E356z5s0S0LAr?si=23953eea287141a3"
 
-daily_mix_5 <- request("https://api.spotify.com/v1/playlists/37i9dQZF1E356z5s0S0LAr?si=23953eea287141a3") |> 
+edm_punk_mix <- request("https://api.spotify.com/v1/playlists/5kcnyxITvHM8uhkKCEJq1f") |> 
   req_method("GET") |> 
   req_headers(
     Authorization = paste0("Bearer ", spotify_access_token),
@@ -61,15 +61,17 @@ daily_mix_5 <- request("https://api.spotify.com/v1/playlists/37i9dQZF1E356z5s0S0
   resp_body_json()
 
 # Create data frame with daily mix 5 information
-song_name <- lapply(daily_mix_5$tracks$items, FUN = function(x) {x$track$name}) %>% unlist()
-song_id <- lapply(daily_mix_5$tracks$items, FUN = function(x) {x$track$id}) %>% unlist()
-artist_name <- lapply(daily_mix_5$tracks$items, FUN = function(x) {x$track$artists[[1]]$name}) %>% unlist()
-album_art <- lapply(daily_mix_5$tracks$items, FUN = function(x) {x$track$album$images[[3]]$url}) %>% unlist()
-song_duration <- lapply(daily_mix_5$tracks$items, FUN = function(x) {x$track$duration_ms}) %>% unlist()
-popularity <- lapply(daily_mix_5$tracks$items, FUN = function(x) {x$track$popularity}) %>% unlist()
+song_name <- lapply(edm_punk_mix$tracks$items, FUN = function(x) {x$track$name}) %>% unlist()
+song_id <- lapply(edm_punk_mix$tracks$items, FUN = function(x) {x$track$id}) %>% unlist()
+artist_name <- lapply(edm_punk_mix$tracks$items, FUN = function(x) {x$track$artists[[1]]$name}) %>% unlist()
+album_art <- lapply(edm_punk_mix$tracks$items, FUN = function(x) {x$track$album$images[[3]]$url}) %>% unlist()
+song_duration <- lapply(edm_punk_mix$tracks$items, FUN = function(x) {x$track$duration_ms}) %>% unlist()
+popularity <- lapply(edm_punk_mix$tracks$items, FUN = function(x) {x$track$popularity}) %>% unlist()
 
-daily_mix_5_tbl <- data.frame(song_name, song_id, artist_name, album_art, song_duration, popularity) %>% 
-    as_tibble()
+edm_punk_mix_tbl <- data.frame(
+  song_name, song_id, artist_name, album_art, song_duration, popularity
+  ) %>% 
+  as_tibble()
 
 ```
 
@@ -86,7 +88,7 @@ daily_mix_5_tbl <- data.frame(song_name, song_id, artist_name, album_art, song_d
 tempo_list <- vector(mode = "list", length = 50)
 
 for (i in 1:50) {
-    audio_analysis <- request(paste0("https://api.spotify.com/v1/audio-analysis/", daily_mix_5_tbl$song_id[i])) |> 
+    audio_analysis <- request(paste0("https://api.spotify.com/v1/audio-analysis/", edm_punk_mix_tbl$song_id[i])) |> 
       req_method("GET") |> 
       req_headers(
         Authorization = paste0("Bearer ", spotify_access_token),
@@ -99,7 +101,7 @@ for (i in 1:50) {
 }
 
 # Add tempo to daily mix 5 table
-daily_mix_5_tbl$tempo <- I(tempo_list)
+edm_punk_mix_tbl$tempo <- I(tempo_list)
 
 ```
 
@@ -147,7 +149,7 @@ source_footnote <- "**Source:** [Today's Top Hits Playlist](https://open.spotify
 
 ```{r, create_gt_table}
 
-daily_mix_5_tbl |> 
+edm_punk_mix_tbl |> 
     select(album_art, song_name, artist_name, song_duration, popularity, tempo) |>
     rename(track_duration = song_duration) |> 
     gt() |>
@@ -261,7 +263,7 @@ daily_mix_5_tbl |>
 #| echo: false
 #| include: false
 
-ojs_define(daily_mix_ojs = daily_mix_5_tbl)
+ojs_define(daily_mix_ojs = edm_punk_mix_tbl)
 
 ```
 
