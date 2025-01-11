@@ -6,7 +6,6 @@ updated with GitHub Actions.
 ### 🚨 Important Notice
 
 Due to recent <a href="https://developer.spotify.com/blog/2024-11-27-changes-to-the-web-api" target="_blank">changes</a>
-
 in the Spotify API, certain endpoints (such as those used to fetch audio
 features and tempo data) have been deprecated. As a result, this
 dashboard is no longer able to fetch and display updated data.
@@ -49,7 +48,6 @@ each song.
 Special thanks to Melissa Van Bussel for inspiring this project. You can find her work
 below:
 
--   <a href="https://melissavanbussel.github.io/spotify-dashboard/dashboard.html" target="_blank">Spotify Dashboard.</a>
-
--   <a href="https://github.com/melissavanbussel/spotify-dashboard/tree/main" target="_blank">Spotify Dashboard</a>
+-   [Spotify Dashboard](https://melissavanbussel.github.io/spotify-dashboard/dashboard.html) (right-click to open in a new tab)
+-   [Spotify Dashboard Repository](https://github.com/melissavanbussel/spotify-dashboard/tree/main) (right-click to open in a new tab)
 
